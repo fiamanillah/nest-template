@@ -3,7 +3,7 @@ import { Job } from 'bullmq';
 import { MailerService } from '@nestjs-modules/mailer';
 import { Logger } from '@nestjs/common';
 
-@Processor('email-queue')
+@Processor('mail')
 export class MailProcessor extends WorkerHost {
   private readonly logger = new Logger(MailProcessor.name);
 
@@ -37,11 +37,12 @@ export class MailProcessor extends WorkerHost {
     await this.mailerService.sendMail({
       to: data.email,
       subject: 'Welcome to our App! 🎉',
-      template: './welcome', // References src/mail/templates/welcome.hbs
+      template: './welcome',
       context: {
         name: data.fullName,
       },
     });
+    this.logger.log(`Email sent to ${data.email}`);
   }
 
   private async handleOtpEmail(data: { email: string; otp: string }) {
@@ -56,7 +57,6 @@ export class MailProcessor extends WorkerHost {
   }
 
   private async handleResetPassword(data: { email: string; token: string }) {
-    // Implement logic
     await this.mailerService.sendMail({
       to: data.email,
       subject: 'Reset Password',

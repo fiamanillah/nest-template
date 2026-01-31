@@ -17,9 +17,10 @@ import { ResponseStandardizationInterceptor } from './common/interceptors/respon
 import { RequestLoggerMiddleware } from './common/middleware/request-logger.middleware';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
+import { MailModule } from './mail/mail.module';
 
 @Module({
-  imports: [ContextModule, ConfigModule.forRoot(), AuthModule],
+  imports: [ContextModule, ConfigModule.forRoot(), AuthModule, MailModule],
   controllers: [AppController],
   providers: [
     AppService,

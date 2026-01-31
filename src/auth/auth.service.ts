@@ -19,7 +19,7 @@ export class AuthService {
   constructor(
     private prisma: PrismaService,
     private jwtService: JwtService,
-    @InjectQueue('email-queue') private emailQueue: Queue,
+    @InjectQueue('mail') private emailQueue: Queue,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 

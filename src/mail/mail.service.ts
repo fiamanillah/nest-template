@@ -17,7 +17,7 @@ export class MailService {
       {
         attempts: 3,
         backoff: 3000, // Wait 3s before retry
-        removeOnComplete: true,
+        removeOnComplete: false,
       },
     );
   }

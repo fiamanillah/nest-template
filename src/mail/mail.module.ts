@@ -4,12 +4,24 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MailProcessor } from './mail.processor';
 import { join } from 'path';
+import { BullModule } from '@nestjs/bullmq';
+import { MailService } from './mail.service';
 
 @Module({
   imports: [
     ConfigModule,
+    BullModule.registerQueueAsync({
+      name: 'mail',
+    }),
     // 2. Configure Email Service (Nodemailer)
     MailerModule.forRootAsync({
+      imports: [
+        ConfigModule,
+        BullModule.registerQueueAsync({
+          name: 'mail',
+        }),
+      ],
+
       useFactory: (config: ConfigService) => ({
         transport: {
           host: config.get<string>('MAIL_HOST'),
@@ -24,7 +36,7 @@ import { join } from 'path';
           from: `"No Reply" <${config.get('MAIL_FROM')}>`,
         },
         template: {
-          dir: join(__dirname, 'templates'), // Template directory
+          dir: join(__dirname, 'templates'),
           adapter: new HandlebarsAdapter(),
           options: {
             strict: true,
@@ -34,7 +46,7 @@ import { join } from 'path';
       inject: [ConfigService],
     }),
   ],
-  providers: [MailProcessor],
-  exports: [],
+  providers: [MailProcessor, MailService],
+  exports: [MailService],
 })
 export class MailModule {}

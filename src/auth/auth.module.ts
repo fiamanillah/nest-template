@@ -15,7 +15,7 @@ import { BullModule } from '@nestjs/bullmq';
       secret: process.env.JWT_SECRET || 'fallback_secret_do_not_use_in_prod',
       signOptions: { expiresIn: '1d' },
     }),
-    BullModule.registerQueue({ name: 'email-queue' }),
+    BullModule.registerQueue({ name: 'mail' }),
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],
